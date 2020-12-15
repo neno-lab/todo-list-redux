@@ -3,6 +3,7 @@ import {
   HANDLE_INPUT_FIELD,
   DELETE_TODO,
   EDIT_TODO,
+  UPDATE_TODO,
 } from './toDoTypes';
 
 export const createNewTodo = (todo) => {
@@ -30,5 +31,12 @@ export const editTodo = (id) => {
   return {
     type: EDIT_TODO,
     payload: id,
+  };
+};
+
+export const updateTodo = (todo) => {
+  return {
+    type: UPDATE_TODO,
+    payload: todo,
   };
 };

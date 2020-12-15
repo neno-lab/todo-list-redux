@@ -3,11 +3,13 @@ import {
   DELETE_TODO,
   EDIT_TODO,
   HANDLE_INPUT_FIELD,
+  UPDATE_TODO,
 } from '../actions/toDoTypes';
 
 const initialState = {
   inputField: '',
   todos: [],
+  selectedID: undefined,
 };
 
 const toDoReducer = (state = initialState, action) => {
@@ -25,12 +27,21 @@ const toDoReducer = (state = initialState, action) => {
       };
 
     case EDIT_TODO:
-      console.log('edit: ', state.todos[action.payload]);
-      console.log('id: ', action.payload);
-      console.log('todos: ', state.todos);
+      // console.log('edit: ', state.todos[action.payload]);
+      // console.log('id: ', action.payload);
+      // console.log('todos: ', state.todos);
       const item = state.todos.find((item) => item.id === action.payload);
-      console.log(item);
-      return { ...state, inputField: item.title };
+      // console.log(item);
+      return { ...state, inputField: item.title, selectedID: action.payload };
+
+    case UPDATE_TODO:
+      return {
+        ...state,
+        todos: state.todos.map((item) =>
+          item.id !== action.payload.selectedID ? item : action.payload
+        ),
+        selectedID: undefined,
+      };
 
     default:
       return state;

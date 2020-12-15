@@ -1,7 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { createNewTodo, handleInputField } from '../redux/actions/toDoActions';
+import {
+  createNewTodo,
+  handleInputField,
+  updateTodo,
+} from '../redux/actions/toDoActions';
 import TodoList from './TodoList';
 
 class TodoPage extends React.Component {
@@ -11,12 +15,18 @@ class TodoPage extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    if (!this.props.inputField) return;
 
-    this.props.createNewTodo({
-      id: Math.random().toString(36).substr(2, 9),
-      title: this.props.inputField,
-    });
+    if (this.props.selectedID || this.props.selectedID === 0) {
+      this.props.updateTodo({
+        title: this.props.inputField,
+        selectedID: this.props.selectedID,
+      });
+    } else {
+      this.props.createNewTodo({
+        id: Math.random().toString(36).substr(2, 9),
+        title: this.props.inputField,
+      });
+    }
 
     this.props.handleInputField('');
   };
@@ -48,6 +58,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     inputField: state.toDoReducer.inputField,
     todos: state.toDoReducer.todos,
+    selectedID: state.toDoReducer.selectedID,
   };
 };
 
@@ -55,6 +66,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     handleInputField: bindActionCreators(handleInputField, dispatch),
     createNewTodo: bindActionCreators(createNewTodo, dispatch),
+    updateTodo: bindActionCreators(updateTodo, dispatch),
   };
 };
 
